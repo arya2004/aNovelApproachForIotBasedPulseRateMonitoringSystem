@@ -16,10 +16,13 @@ const homeRoutes = require('./routes/homeRoutes');
 const authRoutes = require('./routes/authRoutes');
 const patientRoutes = require('./routes/patientRoutes');
 const pulseRoutes = require('./routes/pulseRoutes');
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1:27017/patient-data')
-    .then(() => console.log('DB connected!!!'))
+
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log(`DB connected to ${process.env.MONGO_INITDB_DATABASE}!!!`))
     .catch(err => console.error('Connection error:', err));
+
 
 const liveReloadServer = livereload.createServer();
 liveReloadServer.server.once("connection", () => {
@@ -49,6 +52,10 @@ app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
+});
+
+app.get("/test", (req, res) => {
+  res.send('test');
 });
 
 app.use('/', homeRoutes);
