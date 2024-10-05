@@ -1,15 +1,16 @@
-FROM node:16
+FROM node:18-alpine AS build
 
 WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
 COPY . .
 
-COPY .env .env
+RUN apk add --update --no-cache python3 python3-dev build-base && \
+  npm ci
 
-EXPOSE 3000
+FROM node:18-alpine AS run
 
-CMD ["node", "index.js"]
+COPY --from=build --chown=1001:1001 /app /app
+WORKDIR /app
+RUN mkdir /.npm && chown 1001:1001 /.npm
+USER 1001:1001
+
+CMD node app.js

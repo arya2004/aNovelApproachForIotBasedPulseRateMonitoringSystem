@@ -1,17 +1,23 @@
 version: "3"
+name: "backend-dev"
 services:
   app:
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
+      args:
+        - RUNNING_USER=${RUNNING_USER:-0:0}
     ports:
       - "3000:3000"
+    volumes:
+      - .:/app
     environment:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE:-patient-data}
       - MONGO_URI=${MONGO_URI:-mongodb://mongo:27017/${MONGO_INITDB_DATABASE:-patient-data}}
     depends_on:
-      mongo:
-        condition: service_healthy
+      - mongo
+    links:
+      - mongo
 
   mongo:
     image: mongo:latest
@@ -21,11 +27,6 @@ services:
       - mongo-data:/data/db
     environment:
       - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE:-patient-data}
-    healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' --quiet | grep 1
-      interval: 2s
-      timeout: 5s
-      retries: 10
 
 volumes:
   mongo-data:
