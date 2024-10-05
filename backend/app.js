@@ -16,6 +16,7 @@ const homeRoutes = require('./routes/homeRoutes');
 const authRoutes = require('./routes/authRoutes');
 const patientRoutes = require('./routes/patientRoutes');
 const pulseRoutes = require('./routes/pulseRoutes');
+const Patient = require('./models/patient');
 require('dotenv').config();
 
 
