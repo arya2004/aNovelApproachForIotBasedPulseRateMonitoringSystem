@@ -29,10 +29,28 @@ This is an Express MVC (Model-View-Controller) boilerplate that provides a struc
 
 ## Usage
 
+### Running With docker
+
+1. To start with production image:
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   Or
+
+   To start with development image:
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml build --build-arg 'RUNNING_USER='$(id -u)':'$(id -g) && docker-compose -f docker-compose.dev.yml up
+   ```
+
+### Running with node
+
 1. Start the Express server:
 
    ```bash
-   npm start
+   node app.js
    ```
 
    The server will start running on `http://localhost:3000`.
@@ -51,7 +69,6 @@ This Express MVC boilerplate follows the MVC design pattern, providing a clear s
 - `README.md` - Documentation for the Express MVC boilerplate.
 
 Feel free to modify the structure to suit your specific project needs.
-
 
 ## Deployment
 
